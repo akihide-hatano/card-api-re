@@ -17,35 +17,38 @@ class CardController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    /** POST /api/v1/cards */
     public function store(Request $request)
     {
-        //
+        $card = Card::create($request->validate());
+        return (new CardResource($card))
+        ->response()
+        ->setStatusCode(201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Card $card)
     {
-        //
+        return new CardResource($card);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Card $card)
     {
-        //
+        $card->updata($request->validate());
+        return new CardResource($card);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Card $card)
     {
-        //
+        $card->delete();
+        return response()->noContent();
     }
 }
