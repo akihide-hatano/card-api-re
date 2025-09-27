@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Card extends Model
 {
+
+    use HasFactory;
+    
     protected $table = 'cards';
     protected $primaryKey = 'card_id';
     public $timestamps = true; // デフォルトtrue。falseにするとcreated_at/updated_atを無視
