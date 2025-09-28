@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCardRequest;
 use App\Models\Card;
 use Illuminate\Http\Request;
 use App\Http\Resources\CardResource;
@@ -19,12 +20,14 @@ class CardController extends Controller
     }
 
     /** POST /api/v1/cards */
-    public function store(Request $request)
+    public function store(StoreCardRequest $request)
     {
-        $card = Card::create($request->validate());
+        $card = Card::create($request->validated());
+
         return (new CardResource($card))
-        ->response()
-        ->setStatusCode(201);
+            ->response()
+            ->setStatusCode(201)
+            ->header('Location', route('cards.show', $card));
     }
 
     /**
