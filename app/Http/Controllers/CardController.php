@@ -44,8 +44,8 @@ class CardController extends Controller
      */
     public function update(UpdateCardRequest $request, Card $card)
     {
-        $card->update($request->validate());
-        return new CardResource($card);
+        $card->update($request->validated());
+        return new CardResource($card->refresh());
     }
 
     /**
