@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Card;
 use Illuminate\Foundation\Testing\RefreshDatabaseState;
+use Illuminate\Validation\Rules\Can;
 
 class CardApiTest extends TestCase
 {
@@ -65,7 +66,19 @@ class CardApiTest extends TestCase
     ]);
 }
 
+    public function test_show_return_404_when_not_found()
+{
+    $this->getJson('/api/v1/cards/99999')->assertStatus(404);
+}
 
+    public function test_update_return_200_and_updates_title(){
 
+        $card = Card::create(['title'=>'old']);
+        $res = $this->patchJson("/api/v1/cards/{$card->id}", ['title' => 'new']);
+
+        $res->assertStatus(200)->assertJsonPath('data.title','new');
+
+        $this->assertDatabaseHas('cards',['id'=>$card->id,'title'=>'new']);
+    }
 
 }
