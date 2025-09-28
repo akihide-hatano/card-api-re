@@ -81,4 +81,34 @@ class CardApiTest extends TestCase
         $this->assertDatabaseHas('cards',['id'=>$card->id,'title'=>'new']);
     }
 
+
+    /** 削除: 204（DBから消える） */
+    public function test_destroy_returns_204_and_removes_row()
+    {
+        $card = Card::create(['title' => 'to delete']);
+
+        $res = $this->deleteJson("/api/v1/cards/{$card->id}");
+
+        $res->assertNoContent();
+        $this->assertDatabaseMissing('cards', ['id' => $card->id]);
+    }
+
+    /** 作成: 422（title missing） */
+    public function test_store_returns_422_when_title_missing()
+    {
+        $this->postJson('/api/v1/cards', ['description' => 'no title'])
+             ->assertStatus(422)
+             ->assertJsonValidationErrors(['title']);
+    }
+
+    /** 更新: 422（title empty はNG / missingはOKの対比を確認したい場合） */
+    public function test_update_returns_422_when_title_empty()
+    {
+        $card = Card::create(['title' => 'keep']);
+
+        $this->patchJson("/api/v1/cards/{$card->id}", ['title' => ''])
+             ->assertStatus(422)
+             ->assertJsonValidationErrors(['title']);
+    }
+
 }
