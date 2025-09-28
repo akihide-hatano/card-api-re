@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCardRequest;
+use App\Http\Requests\UpdateCardRequest;
 use App\Models\Card;
 use Illuminate\Http\Request;
 use App\Http\Resources\CardResource;
@@ -41,7 +42,7 @@ class CardController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Card $card)
+    public function update(UpdateCardRequest $request, Card $card)
     {
         $card->update($request->validate());
         return new CardResource($card);
