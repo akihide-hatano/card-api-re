@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCardRequest;
 use App\Models\Card;
 use Illuminate\Http\Request;
 use App\Http\Resources\CardResource;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CardController extends Controller
 {
@@ -47,7 +48,6 @@ class CardController extends Controller
         $card->update($request->validated());
         return new CardResource($card->refresh());
     }
-
     /**
      * Remove the specified resource from storage.
      */
